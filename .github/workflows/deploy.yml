@@ -2,6 +2,11 @@ name: Deploy React + Vite to GH Pages
 
 on:
   workflow_dispatch:
+    inputs:
+      ref:
+        description: "Branch or tag to deploy"
+        required: true
+        default: "main"
   push:
     branches:
       - main
@@ -11,11 +16,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository
+      # Checkout the specified branch (for manual runs)
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.ref || 'main' }}
 
-      # Setup Nodejs
+      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -30,7 +37,7 @@ jobs:
         run: npm run build
 
       # Deploy
-      - name: Deploy to github pages
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
