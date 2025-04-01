@@ -12,9 +12,24 @@ on:
       - main
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: node:20-slim
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: npm ci --prefer-offline
+
+      - name: Build Project
+        run: npm run build
+
   build-deploy:
     runs-on: ubuntu-latest
-
+    if: always()  # Джоба всегда создаётся, но ждёт ручного запуска
+    environment: staging  # Требует ручного подтверждения
     steps:
       # Checkout the specified branch (for manual runs)
       - name: Checkout code
