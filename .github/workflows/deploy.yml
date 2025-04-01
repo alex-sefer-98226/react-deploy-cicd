@@ -35,7 +35,6 @@ jobs:
 
   build-deploy:
     runs-on: ubuntu-latest
-    if: always()  # Джоба всегда создаётся, но ждёт ручного запуска
     environment: staging  # Требует ручного подтверждения
     steps:
       # Checkout the specified branch (for manual runs)
